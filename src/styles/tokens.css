@@ -1,0 +1,104 @@
+/*
+  Layout: left-aligned editorial grid (max 1240px). Every section is a "system":
+  a header strip in mono, then content that alternates wide diagram / narrow prose.
+
+  Colour has two jobs only:
+    --signal  = data moving through a system (retrieval, forward pass, accepted output)
+    --amber   = the system catching itself (critic loop, low-confidence route, SLA misses)
+  Everything else is ink and paper.
+
+  Dark is the primary look. Light is a blueprint/schematic variant, applied when the
+  OS prefers light (and no explicit choice) or when data-theme="light" is set.
+*/
+:root {
+  --ink: #080b12;
+  --ink-raised: #0e131d;
+  --ink-sunk: #05070c;
+  --line: #1c2433;
+  --line-strong: #2c374c;
+  --text: #e8ebf3;
+  --text-2: #a7afc2;
+  --text-3: #7e87a1;
+  --signal: #7fa8ff;
+  --signal-strong: #a9c4ff;
+  --signal-wash: rgba(127, 168, 255, 0.12);
+  --amber: #f3b04e;
+  --amber-wash: rgba(243, 176, 78, 0.14);
+  --focus: #a9c4ff;
+  --grid-dot: rgba(167, 175, 194, 0.07);
+  --shadow: 0 30px 80px -40px rgba(0, 0, 0, 0.8);
+
+  --font-display: 'Bricolage Grotesque Variable', 'Bricolage Grotesque', 'Segoe UI', system-ui, sans-serif;
+  --font-body: 'Hanken Grotesk Variable', 'Hanken Grotesk', 'Segoe UI', system-ui, sans-serif;
+  --font-mono: 'Martian Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+
+  /* type scale (1.25 minor third-ish, fluid at the top) */
+  --step--2: 0.6875rem;
+  --step--1: 0.8125rem;
+  --step-0: 1.0625rem;
+  --step-1: 1.25rem;
+  --step-2: 1.625rem;
+  --step-3: clamp(1.875rem, 1.3rem + 2.2vw, 2.75rem);
+  --step-4: clamp(2.25rem, 1.4rem + 3.6vw, 4rem);
+  --step-5: clamp(2.6rem, 1.2rem + 5.6vw, 6.25rem);
+
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4.5rem;
+  --space-9: clamp(4.5rem, 3rem + 6vw, 8.5rem);
+
+  --max: 1240px;
+  --gutter: max(16px, env(safe-area-inset-left, 0px));
+  --gutter-r: max(16px, env(safe-area-inset-right, 0px));
+  --radius: 6px;
+  --ease: cubic-bezier(0.2, 0.7, 0.1, 1);
+
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme='dark']) {
+    --ink: #edf1f7;
+    --ink-raised: #f8fafd;
+    --ink-sunk: #e2e8f1;
+    --line: #cdd6e4;
+    --line-strong: #a9b6cb;
+    --text: #0d1830;
+    --text-2: #3a4865;
+    --text-3: #52607b;
+    --signal: #1d4fd0;
+    --signal-strong: #123a9e;
+    --signal-wash: rgba(29, 79, 208, 0.09);
+    --amber: #8f4c00;
+    --amber-wash: rgba(168, 92, 0, 0.1);
+    --focus: #1d4fd0;
+    --grid-dot: rgba(29, 79, 208, 0.09);
+    --shadow: 0 30px 70px -45px rgba(13, 24, 48, 0.35);
+    color-scheme: light;
+  }
+}
+
+:root[data-theme='light'] {
+  --ink: #edf1f7;
+  --ink-raised: #f8fafd;
+  --ink-sunk: #e2e8f1;
+  --line: #cdd6e4;
+  --line-strong: #a9b6cb;
+  --text: #0d1830;
+  --text-2: #3a4865;
+  --text-3: #52607b;
+  --signal: #1d4fd0;
+  --signal-strong: #123a9e;
+  --signal-wash: rgba(29, 79, 208, 0.09);
+  --amber: #8f4c00;
+  --amber-wash: rgba(168, 92, 0, 0.1);
+  --focus: #1d4fd0;
+  --grid-dot: rgba(29, 79, 208, 0.09);
+  --shadow: 0 30px 70px -45px rgba(13, 24, 48, 0.35);
+  color-scheme: light;
+}

@@ -1,0 +1,578 @@
+/* Asta lives in a fixed layer above the page. Only its body, bubble and tab take pointer events. */
+.asta-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  --asta-size: 60px;
+}
+@media (max-width: 719px) {
+  .asta-layer {
+    --asta-size: 46px;
+  }
+}
+
+/* ---------------- body ---------------- */
+.asta {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: var(--asta-size);
+  height: var(--asta-size);
+  will-change: transform;
+  opacity: 0;
+  visibility: hidden;
+}
+.asta.is-visible {
+  opacity: 1;
+  visibility: visible;
+}
+.asta.is-visible .asta__body {
+  animation: astaPop 0.7s var(--ease) both;
+}
+
+.asta__body {
+  pointer-events: auto;
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  border-radius: 50%;
+  cursor: grab;
+  touch-action: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.asta.is-dragging .asta__body {
+  cursor: grabbing;
+}
+.asta__body:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 6px;
+}
+
+.asta__inner {
+  width: 100%;
+  height: 100%;
+  transition: transform 0.25s var(--ease);
+}
+.asta__float {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  animation: astaBob 4.2s ease-in-out infinite;
+}
+.asta__svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  filter: drop-shadow(0 6px 18px rgba(0, 0, 0, 0.35));
+}
+
+.asta__track {
+  fill: none;
+  stroke: var(--line);
+  stroke-width: 1.4;
+}
+.asta__progress {
+  fill: none;
+  stroke: var(--signal);
+  stroke-width: 2;
+  stroke-linecap: round;
+  transition: stroke-dasharray 0.8s var(--ease);
+}
+.asta__orbit {
+  animation: astaSpin 18s linear infinite;
+  transform-origin: 0 0;
+}
+.asta__memory {
+  fill: var(--signal-strong);
+  animation: astaDotIn 0.6s var(--ease) both;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.asta__shell {
+  fill: var(--ink-raised);
+  stroke: var(--text);
+  stroke-width: 1.6;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: astaBreathe 3.8s ease-in-out infinite;
+  transition:
+    stroke 0.3s var(--ease),
+    fill 0.3s var(--ease);
+}
+.asta__inner.is-near .asta__shell {
+  stroke: var(--signal-strong);
+}
+
+.asta__eye {
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: transform 0.12s ease;
+}
+.asta__eye.is-blink {
+  transform: scaleY(0.1);
+}
+.asta__pupil {
+  fill: var(--text);
+}
+.asta__glint {
+  fill: var(--ink-raised);
+}
+.asta__smile {
+  fill: none;
+  stroke: var(--text);
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  opacity: 0;
+}
+
+/* ---------------- moods ---------------- */
+.asta[data-mood='excited'] .asta__shell {
+  stroke: var(--signal-strong);
+}
+.asta[data-mood='excited'] .asta__svg {
+  animation: astaHop 0.6s var(--ease);
+}
+.asta[data-mood='checking'] .asta__shell {
+  stroke: var(--amber);
+  fill: color-mix(in srgb, var(--amber) 14%, var(--ink-raised));
+}
+.asta[data-mood='checking'] .asta__progress {
+  stroke: var(--amber);
+}
+.asta[data-mood='sleepy'] .asta__eye {
+  transform: scaleY(0.16) translateY(2px);
+}
+.asta[data-mood='sleepy'] .asta__shell {
+  animation-duration: 6s;
+}
+.asta[data-mood='sleepy'] .asta__float {
+  animation-duration: 7s;
+}
+.asta[data-mood='dizzy'] .asta__svg {
+  animation: astaWobble 0.45s ease-in-out 3;
+}
+.asta[data-mood='annoyed'] .asta__eye {
+  transform: scaleY(0.42);
+}
+.asta[data-mood='annoyed'] .asta__svg {
+  animation: astaShake 0.4s ease-in-out 2;
+}
+.asta[data-mood='squint'] .asta__eye {
+  transform: scaleY(0.38);
+}
+.asta[data-mood='happy'] .asta__eye {
+  opacity: 0;
+}
+.asta[data-mood='happy'] .asta__smile {
+  opacity: 1;
+}
+.asta[data-mood='happy'] .asta__shell {
+  stroke: var(--signal-strong);
+}
+.asta[data-mood='happy'] .asta__svg {
+  animation: astaHop 0.6s var(--ease) 2;
+}
+
+.asta__zzz {
+  position: absolute;
+  right: -6px;
+  top: -10px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-3);
+  pointer-events: none;
+}
+.asta__zzz span {
+  position: absolute;
+  animation: astaZ 2.4s ease-in infinite;
+  opacity: 0;
+}
+.asta__zzz span:nth-child(2) {
+  animation-delay: 0.8s;
+}
+.asta__zzz span:nth-child(3) {
+  animation-delay: 1.6s;
+}
+
+.asta__burst {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  pointer-events: none;
+}
+.asta__burst span {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  margin: -2.5px;
+  border-radius: 50%;
+  background: var(--signal-strong);
+  animation: astaBurst 0.9s var(--ease) forwards;
+}
+.asta__burst span:nth-child(3n) {
+  background: var(--amber);
+}
+
+/* ---------------- hatch ---------------- */
+.asta-hatch {
+  position: absolute;
+  left: 0;
+  top: 0;
+  pointer-events: none;
+}
+.asta-hatch span {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  margin: -2px;
+  border-radius: 50%;
+  background: var(--signal-strong);
+  animation: astaConverge 0.9s cubic-bezier(0.55, 0, 0.3, 1) both;
+}
+
+/* ---------------- pointing line ---------------- */
+.asta-point {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.asta-point__line {
+  fill: none;
+  stroke: var(--signal);
+  stroke-width: 1.4;
+  stroke-dasharray: 4 5;
+  animation: astaDash 1s linear infinite;
+  opacity: 0.9;
+}
+.asta-point__dot {
+  fill: var(--signal);
+}
+
+/* ---------------- bubble ---------------- */
+.asta-bubble {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: max-content;
+  max-width: min(300px, calc(100vw - 32px));
+  padding: 10px 14px 12px;
+  display: grid;
+  gap: 8px;
+  pointer-events: auto;
+  background: var(--ink-raised);
+  color: var(--text);
+  border: 1px solid var(--line-strong);
+  border-radius: 12px;
+  box-shadow: 0 18px 50px -20px rgba(0, 0, 0, 0.55);
+  font-size: 0.92rem;
+  line-height: 1.45;
+  animation: astaBubbleIn 0.25s var(--ease);
+  will-change: transform;
+}
+.asta-bubble__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: -2px;
+}
+.asta-bubble__name {
+  color: var(--signal-strong);
+  font-size: 0.625rem;
+}
+.asta-bubble__close {
+  width: 28px;
+  height: 28px;
+  margin: -6px -8px -6px 0;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-3);
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.asta-bubble__close:hover {
+  color: var(--text);
+}
+.asta-bubble__think {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 6px;
+  font-size: 0.625rem;
+  text-transform: none;
+  letter-spacing: 0.02em;
+  color: var(--text-3);
+}
+.asta-bubble__think span {
+  opacity: 0.35;
+  transition:
+    opacity 0.2s,
+    color 0.2s;
+}
+.asta-bubble__think span + span::before {
+  content: '→ ';
+  color: var(--text-3);
+}
+.asta-bubble__think span.is-on {
+  opacity: 1;
+  color: var(--signal-strong);
+}
+.asta-bubble__draft {
+  color: var(--text-2);
+  position: relative;
+  width: fit-content;
+}
+.asta-bubble__draft::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 52%;
+  height: 1.5px;
+  width: 0;
+  background: var(--amber);
+  transition: width 0.45s var(--ease);
+}
+.asta-bubble__draft.is-struck {
+  color: var(--amber);
+}
+.asta-bubble__draft.is-struck::after {
+  width: 100%;
+}
+.asta-bubble__text {
+  min-height: 1.4em;
+}
+.asta-bubble__caret {
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  margin-left: 2px;
+  vertical-align: -0.15em;
+  background: var(--signal-strong);
+  animation: astaCaret 0.8s steps(1) infinite;
+}
+.asta-bubble__list {
+  list-style: none;
+  display: grid;
+  gap: 6px;
+  font-size: 0.875rem;
+  color: var(--text-2);
+}
+.asta-bubble__list li.is-done {
+  color: var(--text);
+}
+.asta-bubble__list li span[aria-hidden] {
+  display: inline-block;
+  width: 1.2em;
+  color: var(--text-3);
+}
+.asta-bubble__list li.is-done span[aria-hidden] {
+  color: var(--signal-strong);
+}
+.asta-bubble__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding-top: 2px;
+}
+.asta-btn {
+  display: inline-flex;
+  align-items: center;
+  min-height: 36px;
+  padding: 0.35rem 0.8rem;
+  border-radius: 999px;
+  border: 1px solid var(--line-strong);
+  background: transparent;
+  color: var(--text);
+  font: 600 0.84rem var(--font-body);
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background 0.2s var(--ease),
+    border-color 0.2s var(--ease);
+}
+.asta-btn:hover {
+  border-color: var(--text-2);
+}
+.asta-btn.is-primary {
+  background: var(--text);
+  border-color: var(--text);
+  color: var(--ink);
+}
+.asta-btn.is-primary:hover {
+  background: var(--signal-strong);
+  border-color: var(--signal-strong);
+}
+
+/* ---------------- hidden tab ---------------- */
+.asta-tab {
+  position: absolute;
+  right: max(16px, env(safe-area-inset-right, 0px));
+  bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  pointer-events: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 0.4rem 0.9rem 0.4rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid var(--line-strong);
+  background: var(--ink-raised);
+  color: var(--text-2);
+  font: 600 0.85rem var(--font-body);
+  cursor: pointer;
+  box-shadow: 0 10px 30px -14px rgba(0, 0, 0, 0.5);
+}
+.asta-tab:hover {
+  color: var(--text);
+}
+.asta-tab__eye {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 1.5px solid currentColor;
+  background: radial-gradient(circle, currentColor 0 3px, transparent 3.5px);
+}
+
+/* ---------------- keyframes ---------------- */
+@keyframes astaPop {
+  0% {
+    transform: scale(0.2);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.12);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes astaBob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+}
+@keyframes astaBreathe {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.045);
+  }
+}
+@keyframes astaSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes astaDotIn {
+  from {
+    transform: scale(0);
+  }
+}
+@keyframes astaHop {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  40% {
+    transform: translateY(-7px) scale(1.06, 0.96);
+  }
+}
+@keyframes astaWobble {
+  0%,
+  100% {
+    transform: rotate(0);
+  }
+  25% {
+    transform: rotate(-16deg) translateX(-2px);
+  }
+  75% {
+    transform: rotate(16deg) translateX(2px);
+  }
+}
+@keyframes astaShake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-3px);
+  }
+  75% {
+    transform: translateX(3px);
+  }
+}
+@keyframes astaZ {
+  0% {
+    transform: translate(0, 0) scale(0.7);
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(10px, -22px) scale(1.15);
+    opacity: 0;
+  }
+}
+@keyframes astaBurst {
+  from {
+    transform: translate(0, 0) scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: translate(var(--dx), var(--dy)) scale(0.4);
+    opacity: 0;
+  }
+}
+@keyframes astaConverge {
+  from {
+    transform: translate(var(--dx), var(--dy));
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+  }
+  to {
+    transform: translate(0, 0);
+    opacity: 0.2;
+  }
+}
+@keyframes astaDash {
+  to {
+    stroke-dashoffset: -18;
+  }
+}
+@keyframes astaCaret {
+  50% {
+    opacity: 0;
+  }
+}
+@keyframes astaBubbleIn {
+  from {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .asta__float,
+  .asta__shell,
+  .asta__orbit,
+  .asta-point__line {
+    animation: none !important;
+  }
+}

@@ -1,0 +1,26 @@
+.nf {
+  min-height: 100dvh;
+  display: grid;
+  align-content: center;
+  gap: var(--space-5);
+  padding-block: var(--space-8);
+  background-image: radial-gradient(var(--grid-dot) 1px, transparent 1.2px);
+  background-size: 22px 22px;
+}
+.nf__code {
+  color: var(--amber);
+}
+.nf__title {
+  font-size: var(--step-5);
+  max-width: 14ch;
+}
+.nf__body {
+  color: var(--text-2);
+  max-width: 48ch;
+  font-size: var(--step-1);
+}
+.nf__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
